@@ -11,12 +11,9 @@
         $worker_dir = "D:/Deve/Pyt/TmmGui/src/";
         $worker = "phpworker.py ";
         $worker_args = json_encode($makam) . " " . json_encode($notes);
-        # $cmd = $venv_dir . "python " . $worker_dir . $worker . $worker_args . " > /dev/null 2>/dev/null &";
         $cmd = $venv_dir . "python " . $worker_dir . $worker . $worker_args;
 
         pclose(popen("start /b " . $cmd, "r"));
-
-        # shell_exec($cmd);
 
         $res = [
             "res" => "OK",
