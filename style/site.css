@@ -1,0 +1,574 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+html, body {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12pt;
+    color: #243041;
+    height: 100%;
+    background-color: #F3F1E0;
+}
+
+body {
+    overflow-y: scroll;
+}
+
+body ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+}
+
+body ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+}
+
+body ::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.25);
+    -webkit-transition: color 0.2s ease;
+    transition: color 0.2s ease;
+}
+
+body ::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+body ::-webkit-scrollbar-thumb:hover {
+    background: rgba(128, 135, 139, 0.8);
+}
+
+.dv-main-wrapper {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+.dv-center-content {
+    padding-top: 1rem;
+    width: auto;
+}
+
+#dv-top {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 1.5em;;
+}
+
+.shadowed-porte {
+    position: relative;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 30px -20px #141414;
+}
+
+.dv-score-menu {
+    margin-bottom: 1.5em;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.btn-group {
+    height: 100%;
+}
+
+.btn-group .tmm-menu-btn:not(:first-child), .btn-group .tmm-menu-btn-no:not(:first-child) {
+    margin-left: 0.2em;
+}
+
+.btn-group .tmm-menu-btn, .btn-group .tmm-menu-btn-no {
+    position: relative;
+    border: 1px solid #EAE7DA;
+    padding: 0.2em 0.3em;
+    cursor: pointer;
+    top: 0;
+    box-shadow: none;
+    background-color: #F7F5EA;
+    height: 1.8em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 100ms;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.btn-group .tmm-menu-btn.clicked, .btn-group .tmm-menu-btn-no:focus {
+    top: -2px;
+    box-shadow: 0 2px 8px -4px #141414;
+    background-color: #FCFBF2;
+    outline: none;
+}
+
+.btn-group .tmm-menu-btn img {
+    height: 100%;
+}
+
+.btn-group.acc-group .tmm-menu-btn img {
+    height: 80%;
+}
+
+.ddTmmList {
+    position: absolute;
+    left: -0.5em;
+    top: 100%;
+    background-color: #F9F7ED;
+    border: 1px solid #EFE3D5;
+    box-shadow: 0 0 20px -8px #111;
+    z-index: 3;
+    margin-top: -3em;
+    overflow: hidden;
+    /*overflow-y: scroll;*/
+    height: 0;
+    opacity: 0;
+    width: max-content;
+    transition: height, opacity 100ms;
+}
+
+.tmm-menu-btn-no:focus .ddTmmList {
+    /*height: 10em;*/
+    height: 4em;
+    opacity: 1;
+}
+
+.disabled-elem {
+    color: #ddd;
+    pointer-events: none;
+}
+
+.ddTmmItem {
+    padding: 0.5em 1em;
+    transition: background-color 200ms;
+}
+
+.ddTmmItem:hover {
+    background-color: #FFF;
+}
+
+.ddTmmItem:not(:last-child) {
+    /*border-bottom: 1px solid #EFE3D5;*/
+}
+
+#selectedMakamName, #selectedUsulWrapper, .spn-button-text {
+    width: 6em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+.ddUsulWrapper {
+    width: 3em;
+    display: inline-block;
+    text-align: right;
+}
+
+.usulNum {
+    position: relative;
+    font-size: 0.8em;
+    top: -0.24em;
+    right: -0.3em;
+}
+
+.usulDivision {
+    display: inline-block;
+    transform: rotate(108deg);
+    width: 0.9em;
+    height: 1px;
+    background-color: #243041;
+    position: relative;
+    top: -0.3em;
+}
+
+.usulDen {
+    position: relative;
+    font-size: 0.8em;
+    top: 0.15em;
+    left: -0.25em;
+}
+
+.usulName {
+    margin-left: 0.5em;
+}
+
+.sound {
+    background-image: url('../img/sound_off.svg');
+    background-size: contain;
+    background-position: left center;
+    background-repeat: no-repeat;
+    width: 2em;
+    height: 100%;
+    transition: all 400ms;
+}
+
+/* modal */
+
+.md-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 2000;
+    visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -ms-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.md-show {
+    visibility: visible;
+}
+
+.md-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    opacity: 0;
+    background: rgba(240, 239, 235, 0.9);
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+.md-show ~ .md-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.md-content {
+    background-color: #fffdf5;
+    color: #1d2530;
+    box-shadow: 0 0 30px -20px #141414;
+    width: 26em;
+    height: 18em;
+    display: flex;
+    justify-content: center;
+}
+
+.md-fx .md-content {
+    -webkit-transform: translateY(-200%);
+    -ms-transform: translateY(-200%);
+    transform: translateY(-200%);
+    opacity: 0;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.md-show.md-fx .md-content {
+    -webkit-transform: translateY(0%);
+    -ms-transform: translateY(0%);
+    transform: translateY(0%);
+    opacity: 1;
+}
+
+/* Status */
+.outer {
+    flex: 1;
+    width: 100%;
+    padding: 2em;
+}
+
+.progress {
+    display: inline-flex;
+    width: 100%;
+    height: 100%;
+}
+
+.progress > div {
+    display: flex;
+    flex-direction: column;
+    color: #333;
+}
+
+.progress > div.left {
+    padding-right: 20px;
+    text-align: right;
+}
+
+.progress > div.left div:last-of-type:after {
+    display: none;
+}
+
+.progress > div.left div:after {
+    content: "";
+    background: rgba(51, 51, 51, 0.1);
+    border-radius: 2px;
+    position: absolute;
+    right: -20px;
+    top: 10px;
+    height: 101%;
+    width: 1px;
+    transform: translateX(50%);
+}
+
+.progress > div.right {
+    padding-left: 20px;
+}
+
+.progress > div.right div.prev:after {
+    transition: none;
+}
+
+.progress > div.right div.current {
+    color: #333;
+    font-weight: bold;
+}
+
+.progress > div.right div.current:before {
+    background: #333;
+    padding: 10px;
+    transition: all 0.2s 0.15s cubic-bezier(0.175, 0.885, 0.32, 2);
+    animation: glow 1s infinite alternate;
+}
+
+.progress > div.right div.current:after {
+    height: 0;
+    transition: height 0.2s ease-out;
+}
+
+.progress > div.right div.current ~ div {
+    color: #666;
+}
+
+.progress > div.right div.current ~ div:before {
+    background: #666;
+    padding: 2.5px;
+}
+
+.progress > div.right div.current ~ div:after {
+    height: 0;
+    transition: none;
+}
+
+.progress > div.right div:before {
+    content: "";
+    background: #333;
+    padding: 5px;
+    border-radius: 50%;
+    position: absolute;
+    left: -20px;
+    top: 10px;
+    transform: translateX(-50%) translateY(-50%);
+    transition: padding 0.2s ease;
+}
+
+.progress > div.right div:after {
+    content: "";
+    background: #333;
+    border-radius: 2px;
+    position: absolute;
+    left: -20px;
+    top: 10px;
+    height: 101%;
+    width: 2px;
+    transform: translateX(-50%);
+    transition: height 0.2s ease;
+}
+
+.progress > div div {
+    flex: 1;
+    position: relative;
+    line-height: 20px;
+    cursor: default;
+    min-height: 30px;
+}
+
+.progress > div div:last-of-type {
+    flex: 0;
+}
+
+.done.current, .done.current > a {
+    color: #73ab00 !important;
+}
+
+.done.current:before {
+    background: #73ab00 !important;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 4px -4px rgba(140, 212, 32, 0.4);
+    }
+    to {
+        box-shadow: 0 0 4px 4px rgba(140, 212, 32, 0.4);
+    }
+}
+
+#dv-progress-error {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+}
+
+#spn-error-message {
+    color: #801a05;
+    line-height: 150%;
+}
+
+.fadingIn {
+    animation: fadingIn 0.2s forwards;
+}
+
+@keyframes fadingIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fadingOut {
+    animation: fadingOut 0.2s forwards;
+}
+
+@keyframes fadingOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.dv-button {
+    position: relative;
+    border: 1px solid #EAE7DA;
+    padding: 0.2em 0.3em;
+    cursor: pointer;
+    box-shadow: none;
+    background-color: #F7F5EA;
+    height: 1.8em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 100ms;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.no-ul {
+    margin: 0 2em;
+    text-align: center;
+}
+
+
+@media screen and (max-width: 1030px) {
+    html, body {
+        font-size: 11pt;
+    }
+}
+
+@media screen and (max-width: 890px) {
+    html, body {
+        font-size: 10pt;
+    }
+}
+
+@media screen and (max-width: 820px) {
+    html, body {
+        font-size: 9pt;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    html, body {
+        font-size: 8pt;
+    }
+}
+
+@media screen and (max-width: 670px) {
+    html, body {
+        font-size: 7pt;
+    }
+}
+
+
+@media print {
+    html {
+        zoom: 75%;
+    }
+
+    body {
+        margin: 0;
+        background-color: #fff;
+    }
+
+    .shadowed-porte {
+        box-shadow: none;
+    }
+
+    #dv-top, #dv-score-menu, .no-print {
+        display: none;
+    }
+
+    @page {
+        size: A4;
+        margin: 0;
+    }
+}
