@@ -1,13 +1,14 @@
 <?php
-    require_once("phglobals.pxp");
+    require_once("phglobals.php");
     error_reporting(E_ERROR | E_PARSE);
     try {
         $str_json = file_get_contents("php://input");
         $client_params = json_decode($str_json, true);
+
         $makam = $client_params["makam"];
         $file_name = $client_params["fileName"];
 
-        $lines = explode("\n", file_get_contents($downloads_dir . $filename . ".txt"));
+        $lines = explode("\n", file_get_contents($downloads_dir . $file_name . ".txt"));
         $last_line = end($lines);
         if(str_contains($last_line, "ERR")) {
             $res = [

@@ -1,5 +1,5 @@
 <?php
-    require_once("phglobals.pxp");
+    require_once("phglobals.php");
     error_reporting(E_ERROR | E_PARSE);
     try {
         $str_json = file_get_contents("php://input");
