@@ -580,12 +580,12 @@
     }
 
     function toServerBtnClick(e, sender) {
-        // sender.style.color = '#ddd';
-        // sender.style.pointerEvents = 'none';
+        sender.style.color = '#ddd';
+        sender.style.pointerEvents = 'none';
         e.stopPropagation();
 
-        // resetProgressStatus();
-        // toggleProgressModal(true);
+        resetProgressStatus();
+        toggleProgressModal(true);
 
         let song = tmmScore.getWholePlayableObject();
         let notes = [];
@@ -595,10 +595,19 @@
         let xhr = new XMLHttpRequest();
         xhr.onload = function () {
             if (this.status === 200) {
-                let response = xhr.response;
+                let response = JSON.parse(xhr.response);
                 console.log('response is:', response);
+                if (response['res'] === 'OK') {
+                    let fileName = response['id'];
+                    updateCompositionProgress(fileName);
+                } else {
+                    toggleProgressError(true);
+                    return false;
+                }
             } else {
                 console.log('Err X');
+                toggleProgressError(true);
+                return false;
             }
         }
 
@@ -613,65 +622,61 @@
         "z": [["La4:1/8", "Fa5#4:1/8", "Mi5:1/8", "Fa5#4:1/8", "Mi5:1/8", "Re5:1/8", "Do5#4:1/8", "Si4b4:1/8", "Si4b4:1/8"], ["La4:1/8", "La4:1/2", "Rest:1/8", "Do5#4:1/4", "Re5:1/8"], ["Re5:1/8", "Mi5:1/8", "Re5:1/8", "Do5#4:1/8", "Do5#4:1/8", "Si4b4:1/8", "La4:1/8", "Si4b4:1/8", "Do5#4:1/8"], ["Re5:1/8", "Do5#4:1/16", "Si4b4:1/16", "La4:1/16", "Si4b4:1/16", "La4:1/16", "Si4b4:1/16", "Re5:1/16", "Mi5:1/16", "Re5:1/16", "Do5#4:1/16", "Si4b4:1/16", "La4:1/4", "Sol4:1/16"]]
     };
 
-    function updateCompositionProgress(status_url) {
+    function updateCompositionProgress(fileName) {
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', status_url, true);
-        xhr.responseType = 'json';
         xhr.onload = function () {
             if (this.status === 200) {
-                let response = xhr.response;
+                let response = JSON.parse(xhr.response);
                 console.log('response is:', response);
                 let state = response['state'];
                 let status = response['status'];
 
-                if (status === 'ERROR' || (state !== 'PENDING' && state !== 'PROGRESS' && state !== 'SUCCESS')) {
+                if (state === 'ERR') {
                     toggleProgressError(true);
                     return false;
                 }
 
-                if (state === 'PROGRESS') {
-                    if (mParams.lastStatus !== status) {
-                        mParams.lastStatus = status;
-                        switch (status) {
-                            case 'begin':
-                                setProgressStatus('Besteci başlatıldı', 'start', false);
-                                break;
-                            case 'zemin':
-                                setProgressStatus('Besteci başlatıldı', 'start', false);
-                                setTimeout(function () {
-                                    setProgressStatus('Zemin besteleniyor', 'zemin', true);
-                                }, 500);
-                                break;
-                            case 'nakarat':
-                                setProgressStatus('Zemin bestelendi', 'zemin', false);
-                                setTimeout(function () {
-                                    setProgressStatus('Nakarat besteleniyor', 'nakarat', true);
-                                }, 500);
-                                break;
-                            case 'meyan':
-                                setProgressStatus('Nakarat bestelendi', 'nakarat', false);
-                                setTimeout(function () {
-                                    setProgressStatus('Meyan besteleniyor', 'meyan', true);
-                                }, 500);
-                                break;
-                            default:
-                                break;
-                        }
+                if (mParams.lastStatus !== status) {
+                    mParams.lastStatus = status;
+                    switch (status) {
+                        case 'begin':
+                            setProgressStatus('Besteci başlatıldı', 'start', false);
+                            break;
+                        case 'zemin':
+                            setProgressStatus('Besteci başlatıldı', 'start', false);
+                            setTimeout(function () {
+                                setProgressStatus('Zemin besteleniyor', 'zemin', true);
+                            }, 500);
+                            break;
+                        case 'nakarat':
+                            setProgressStatus('Zemin bestelendi', 'zemin', false);
+                            setTimeout(function () {
+                                setProgressStatus('Nakarat besteleniyor', 'nakarat', true);
+                            }, 500);
+                            break;
+                        case 'meyan':
+                            setProgressStatus('Nakarat bestelendi', 'nakarat', false);
+                            setTimeout(function () {
+                                setProgressStatus('Meyan besteleniyor', 'meyan', true);
+                            }, 500);
+                            break;
+                        case 'mu2':
+                            setProgressStatus('Meyan bestelendi', 'meyan', false);
+                            setTimeout(function () {
+                                setProgressStatus('' +
+                                    '<a onclick="closeProgressBoxAfter(2000);" href="' +
+                                    mParams.makam.name + '-' + fileName + '.mu2' +
+                                    '" download>İndirme hazır ↯</a>', 'finish', true);
+                            }, 500);
+                            break;
+                        default:
+                            break;
                     }
-                } else if (state === 'SUCCESS') {
-                    let song = JSON.parse(response['status']);
-                    composedSong = song;
-                    console.log('song is:');
-                    console.log(song);
-                    setProgressStatus('Meyan bestelendi', 'meyan', false);
-                    setTimeout(function () {
-                        setProgressStatus('<a onclick="closeProgressBoxAfter(2000);" href="' + song['mu2'] + '" download>İndirme hazır ↯</a>', 'finish', true);
-                    }, 500);
                 }
 
-                if (state === 'PENDING' || state === 'PROGRESS') {
+                if (status !== 'mu2') {
                     setTimeout(function () {
-                        updateCompositionProgress(status_url);
+                        updateCompositionProgress(fileName);
                     }, 2000);
                 }
 
@@ -680,7 +685,8 @@
                 return false;
             }
         };
-        xhr.send();
+        xhr.open('POST', 'status.php', true);
+        xhr.send(JSON.stringify({'makam': mParams.makam.name, 'fileName': fileName}));
     }
 
     function soundButtonClick(e, sender) {
